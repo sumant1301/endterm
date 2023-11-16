@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Example</title>
+</head>
+<body>
+
+<script>
+    // Function to set a cookie with the user's name and the date of the last access
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    // Function to get the value of a cookie by name
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    // Function to display a welcome message
+    function displayWelcome() {
+        var userName = getCookie('userName');
+        var lastAccess = getCookie('lastAccess');
+
+        if (userName) {
+            alert('Welcome back, ' + userName + '! Your last access was on ' + lastAccess + '.');
+        } else {
+            userName = prompt('Please enter your name:');
+            if (userName) {
+                setCookie('userName', userName, 365);
+                var currentDate = new Date().toDateString();
+                setCookie('lastAccess', currentDate, 365);
+                alert('Welcome, ' + userName + '! This is your first visit.');
+            }
+        }
+    }
+
+    // Call the displayWelcome function on page load
+    window.onload = displayWelcome;
+</script>
+
+</body>
+</html>
